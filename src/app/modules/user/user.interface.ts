@@ -6,9 +6,9 @@ export  interface IUserFullName {
 }
 
 export interface IUserAddress {
-  street?: string;
-  city?: string;
-  country?: string;
+  street: string;
+  city: string;
+  country: string;
 }
 
 export interface IOrder {
@@ -18,7 +18,7 @@ export interface IOrder {
 }
 
 export interface IUser extends Document {
-  userId: string,
+  userId: number,
   username: string;
   password: string;
   fullName: IUserFullName;
