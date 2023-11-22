@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+// import { Model } from 'mongoose';
 
 export  interface IUserFullName {
   firstName: string;

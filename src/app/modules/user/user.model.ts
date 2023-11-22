@@ -46,7 +46,10 @@ const userAddressSchema = new Schema<IUserAddress>({
 });
 
 const orderSchema = new Schema<IOrder>({
-  productName: String,
+  productName: {
+    type: String,
+    maxlength: [25, 'productName can not be more than 25 characters'],
+  },
   price: Number,
   quantity: Number,
 });
