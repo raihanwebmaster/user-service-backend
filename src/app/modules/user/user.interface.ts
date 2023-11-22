@@ -31,6 +31,6 @@ export interface IUser extends Document {
 }
 
 
-export interface UserModel extends Model<IUser> {
-    isUserExists(id: string): Promise<IUser | null>;
-  }
+// export interface UserModel extends Model<IUser> {
+//     isUserExists(id: string): Promise<IUser | null>;
+//   }

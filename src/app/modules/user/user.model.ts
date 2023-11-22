@@ -6,7 +6,7 @@ import {
   IUser,
   IUserAddress,
   IUserFullName,
-  UserModel,
+  //   UserModel,
 } from './user.interface';
 
 const validateHobbiesLength = function (hobbies: string[]) {
@@ -102,4 +102,5 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-export const Student = model<IUser, UserModel>('Student', userSchema);
+export const UserModel = model<IUser>('User', userSchema);
+// export const User = model<IUser, UserModel>('User', userSchema);
