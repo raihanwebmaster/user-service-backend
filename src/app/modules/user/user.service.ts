@@ -14,7 +14,6 @@ const createUserIntoDB = async (userData: IUser) => {
   const { password, ...resultWithoutPassword } = result.toObject();
 
   return resultWithoutPassword;
-  return result;
 };
 
 export const UserServices = {
