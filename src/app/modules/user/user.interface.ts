@@ -1,24 +1,24 @@
-// import { Model } from 'mongoose';
+import { Model } from 'mongoose';
 
-export  interface IUserFullName {
+export type IUserFullName = {
   firstName: string;
   lastName: string;
-}
+};
 
-export interface IUserAddress {
+export type IUserAddress = {
   street: string;
   city: string;
   country: string;
-}
+};
 
-export interface IOrder {
+export type IOrder = {
   productName: string;
   price: number;
   quantity: number;
-}
+};
 
-export interface IUser extends Document {
-  userId: number,
+export type IUser = {
+  userId: number;
   username: string;
   password: string;
   fullName: IUserFullName;
@@ -28,9 +28,8 @@ export interface IUser extends Document {
   hobbies: string[];
   address: IUserAddress;
   orders?: IOrder[];
+};
+
+export interface UserModel extends Model<IUser> {
+  isUserExists(userId: number): Promise<IUser | null>;
 }
-
-
-// export interface UserModel extends Model<IUser> {
-//     isUserExists(id: string): Promise<IUser | null>;
-//   }

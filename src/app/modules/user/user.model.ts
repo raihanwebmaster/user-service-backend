@@ -6,6 +6,7 @@ import {
   IUser,
   IUserAddress,
   IUserFullName,
+  UserModel,
   //   UserModel,
 } from './user.interface';
 
@@ -54,7 +55,7 @@ const orderSchema = new Schema<IOrder>({
   quantity: Number,
 });
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser, UserModel>({
   userId: {
     type: Number,
     unique: true,
@@ -105,5 +106,9 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-export const UserModel = model<IUser>('User', userSchema);
-// export const User = model<IUser, UserModel>('User', userSchema);
+userSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+export const User = model<IUser, UserModel>('User', userSchema);
