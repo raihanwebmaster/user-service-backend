@@ -15,8 +15,12 @@ const createUserIntoDB = async (userData: IUser) => {
 
 const getAllUserFromDB = async () => {
   const result = await User.find().select({
-    pasword: 0,
+    userId: 0,
+    password: 0,
     _id: 0,
+    isActive: 0,
+    hobbies: 0,
+    orders:0
   });
   return result;
 };
@@ -24,7 +28,7 @@ const getAllUserFromDB = async () => {
 const getSingleUserFromDB = async (userId: number) => {
   const result = await User.aggregate([
     { $match: { userId } },
-    { $project: { password: 0 } },
+    { $project: { password: 0, _id: 0 } },
   ]);
   return result;
 };

@@ -53,7 +53,7 @@ const orderSchema = new Schema<IOrder>({
   },
   price: Number,
   quantity: Number,
-});
+},{ _id: false });
 
 const userSchema = new Schema<IUser, UserModel>({
   userId: {
@@ -70,6 +70,7 @@ const userSchema = new Schema<IUser, UserModel>({
   fullName: {
     type: userFullNameSchema,
     required: [true, 'Name is required'],
+    _id: false,
   },
   age: {
     type: Number,
@@ -91,6 +92,7 @@ const userSchema = new Schema<IUser, UserModel>({
   address: {
     type: userAddressSchema,
     required: [true, 'address is required'],
+    _id: false 
   },
   orders: {
     type: [orderSchema],

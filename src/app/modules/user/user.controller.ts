@@ -45,7 +45,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
 
     const result = await UserServices.getSingleUserFromDB(Number(userId));
-    
+
     if (result.length === 0) {
       return res.status(404).json({
         success: false,
@@ -60,7 +60,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
-      data: result,
+      data: result[0],
     });
   } catch (err: any) {
     res.status(500).json({
