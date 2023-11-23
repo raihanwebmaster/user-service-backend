@@ -21,7 +21,16 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+const getSingleUserFromDB = async (userId: number) => {
+  const result = await User.aggregate([
+    { $match: { userId } },
+    { $project: { password: 0 } },
+  ]);
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
+  getSingleUserFromDB,
 };
