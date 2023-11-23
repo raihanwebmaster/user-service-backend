@@ -21,6 +21,25 @@ This project aims to develop a Node.js Express application using TypeScript as t
 + Mongoose: Object Document Mapper (ODM) for MongoDB
 + Zod: Data validation libraries
 
+
+## Installation and Setup
+ - Install Node.js and npm (Node Package Manager)
+ - Clone the Project repository
+    
+```bash
+git clone <git-repository-url>
+```
+- Install project dependencies
+
+```bash
+npm install
+```
+- Start the development server
+     
+```bash
+npm run dev
+```
+
 # API Endpoints
 
 ## User Management
