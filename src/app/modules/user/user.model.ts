@@ -92,7 +92,10 @@ const userSchema = new Schema<IUser, UserModel>({
     type: userAddressSchema,
     required: [true, 'address is required'],
   },
-  orders: [orderSchema],
+  orders: {
+    type: [orderSchema],
+    default: undefined,
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -106,8 +109,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.statics.isUserExists = async function (userId: number, username: string) {
-  const existingUser = await User.find({ userId, username });
+userSchema.statics.isUserExists = async function (
+  userId: number,
+  username: string
+) {
+  const existingUser = await User.findOne({ $or: [{ userId }, { username }] });
   return existingUser;
 };
 

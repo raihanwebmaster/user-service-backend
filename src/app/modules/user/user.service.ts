@@ -8,19 +8,20 @@ const createUserIntoDB = async (userData: IUser) => {
     throw new Error('User already exists!');
   }
   const result = await User.create(userData);
-  const { password, ...resultWithoutPassword } = result.toObject();
+  const { password, _id, ...resultWithoutPassword } = result.toObject();
 
   return resultWithoutPassword;
 };
 
 const getAllUserFromDB = async () => {
-  const result = await User.find().select(
-    "-password"
-  );
+  const result = await User.find().select({
+    pasword: 0,
+    _id: 0,
+  });
   return result;
-}
+};
 
 export const UserServices = {
   createUserIntoDB,
-  getAllUserFromDB
+  getAllUserFromDB,
 };
