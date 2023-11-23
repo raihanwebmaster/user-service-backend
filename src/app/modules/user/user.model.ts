@@ -106,12 +106,8 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.statics.isUserExists = async function (userId: number) {
-  const existingUser = await User.findOne({ userId });
-  return existingUser;
-};
-userSchema.statics.isUserNameExist = async function (username: string) {
-  const existingUser = await User.findOne({ username });
+userSchema.statics.isUserExists = async function (userId: number, username: string) {
+  const existingUser = await User.find({ userId, username });
   return existingUser;
 };
 
