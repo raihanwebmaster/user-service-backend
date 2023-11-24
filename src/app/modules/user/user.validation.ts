@@ -36,4 +36,21 @@ const userZodSchema = z.object({
   orders: z.array(orderZodSchema).optional(),
 });
 
-export const UserZodSchema = userZodSchema;
+const updateUserZodSchema = z.object({
+  username: z.string().optional(),
+  password: z.string().optional(),
+  fullName: userFullNameZodSchema.optional(),
+  age: z.number().optional(),
+  email: z.string().email().optional(),
+  isActive: z.boolean().default(true).optional(),
+  hobbies: z.array(z.string()).refine(hobby => hobby.length >= 2, {
+    message: 'At least two hobbies are required',
+  }).optional(),
+  address: userAddressZodSchema.optional(),
+  orders: z.array(orderZodSchema).optional(),
+});
+
+export const UserZodSchema = {
+  createUserSchmea : userZodSchema,
+  updateUserZodSchema,
+};

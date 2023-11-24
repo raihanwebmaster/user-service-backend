@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const handleZodValidation = (schema: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse(req.body.user);
+      schema.parse(req.body);
       next();
     } catch (err) {
       if (err instanceof z.ZodError) {

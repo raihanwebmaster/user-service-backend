@@ -30,6 +30,18 @@ export type IUser = {
   orders?: IOrder[];
 };
 
+export type IUpdateUser = {
+  username?: string;
+  password?: string;
+  fullName?: IUserFullName;
+  age?: number;
+  email?: string;
+  isActive?: boolean;
+  hobbies?: string[];
+  address?: IUserAddress;
+  orders?: IOrder[];
+};
+
 export interface UserModel extends Model<IUser> {
   isUserExists(userId: number, username?: string): Promise<IUser | null>;
 }

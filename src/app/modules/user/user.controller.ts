@@ -4,7 +4,7 @@ import { UserServices } from './user.service';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
     const result = await UserServices.createUserIntoDB(user);
     res.status(200).json({
       success: true,
@@ -80,6 +80,41 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userUpdateDetails = req.body;
+
+    const result = await UserServices.updateSingleUserFromDB(
+      Number(userId),
+      userUpdateDetails,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully!',
+      data: result,
+    });
+  } catch (err: any) {
+    if (err.code === 404) {
+      res.status(404).json({
+        success: false,
+        message: err.message || 'User not found',
+        error: {
+          code: err.code,
+          description: err.description,
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: err.message || 'something went wrong',
+        error: err,
+      });
+    }
+  }
+};
+
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -114,5 +149,6 @@ export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
+  updateSingleUser,
   deleteUser,
 };
