@@ -11,27 +11,148 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
 const user_service_1 = require("./user.service");
-const user_validation_1 = require("./user.validation");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { user } = req.body;
-        const zodparseData = user_validation_1.UserZodSchema.parse(user);
-        const result = yield user_service_1.UserServices.createUserIntoDB(zodparseData);
+        const user = req.body;
+        const result = yield user_service_1.UserServices.createUserIntoDB(user);
         res.status(200).json({
             success: true,
-            message: 'Student is create successfully',
+            message: 'User created successfully!',
             data: result,
         });
     }
     catch (err) {
-        console.log(err, 'error');
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User already exists!',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.UserServices.getAllUserFromDB();
+        res.status(200).json({
+            success: true,
+            message: 'Users fetched successfully!',
+            data: result,
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
-            message: 'something went wrong',
+            message: err.message || 'something went wrong',
             error: err,
         });
     }
 });
+const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const result = yield user_service_1.UserServices.getSingleUserFromDB(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: 'User fetched successfully!',
+            data: result[0],
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
+const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const userUpdateDetails = req.body;
+        const result = yield user_service_1.UserServices.updateSingleUserFromDB(Number(userId), userUpdateDetails);
+        res.status(200).json({
+            success: true,
+            message: 'User updated successfully!',
+            data: result,
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        yield user_service_1.UserServices.deleteUserFromDB(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: 'User deleted successfully!',
+            data: null,
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
 exports.UserControllers = {
     createUser,
+    getAllUsers,
+    getSingleUser,
+    updateSingleUser,
+    deleteUser,
 };

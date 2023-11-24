@@ -56,7 +56,7 @@ const orderSchema = new mongoose_1.Schema({
     },
     price: Number,
     quantity: Number,
-});
+}, { _id: false });
 const userSchema = new mongoose_1.Schema({
     userId: {
         type: Number,
@@ -72,6 +72,7 @@ const userSchema = new mongoose_1.Schema({
     fullName: {
         type: userFullNameSchema,
         required: [true, 'Name is required'],
+        _id: false,
     },
     age: {
         type: Number,
@@ -93,8 +94,12 @@ const userSchema = new mongoose_1.Schema({
     address: {
         type: userAddressSchema,
         required: [true, 'address is required'],
+        _id: false,
     },
-    orders: [orderSchema],
+    orders: {
+        type: [orderSchema],
+        default: undefined,
+    },
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -105,5 +110,11 @@ userSchema.pre('save', function (next) {
         next();
     });
 });
-// export const UserModel = model<IUser>('User', userSchema);
+userSchema.statics.isUserExists = function (userId, username) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const query = username ? { $or: [{ userId }, { username }] } : { userId };
+        const existingUser = yield exports.User.findOne(query);
+        return existingUser;
+    });
+};
 exports.User = (0, mongoose_1.model)('User', userSchema);
