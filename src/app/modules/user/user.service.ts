@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import { CustomError } from '../../CustomError';
 import { IUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserIntoDB = async (userData: IUser) => {
   if (await User.isUserExists(userData.userId, userData.username)) {
-    throw new Error('User already exists!');
+    throw new CustomError('User already exists!', 404, 'User already exists!');
   }
   const result = await User.create(userData);
   const { password, _id, ...resultWithoutPassword } = result.toObject();
@@ -26,6 +27,9 @@ const getAllUserFromDB = async () => {
 };
 
 const getSingleUserFromDB = async (userId: number) => {
+  if (!await User.isUserExists(userId)) {
+    throw new CustomError('User not found', 404, 'User not found');
+  }
   const result = await User.aggregate([
     { $match: { userId } },
     { $project: { password: 0, _id: 0 } },
@@ -35,7 +39,7 @@ const getSingleUserFromDB = async (userId: number) => {
 
 const deleteUserFromDB = async (userId: number) => {
   if (!(await User.isUserExists(userId))) {
-    throw new Error('User Can not find !');
+    throw new CustomError('User not found!', 404, 'User not found!');
   }
   const result = await User.deleteOne({ userId });
   return result;
@@ -45,5 +49,5 @@ export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
-  deleteUserFromDB
+  deleteUserFromDB,
 };
