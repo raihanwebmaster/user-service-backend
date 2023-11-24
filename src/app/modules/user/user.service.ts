@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { CustomError } from '../../CustomError';
+import config from '../../config';
 import { IUpdateUser, IUser } from './user.interface';
 import { User } from './user.model';
+import bcrypt from 'bcrypt';
 
 const createUserIntoDB = async (userData: IUser) => {
   if (await User.isUserExists(userData.userId, userData.username)) {
@@ -40,6 +42,12 @@ const getSingleUserFromDB = async (userId: number) => {
 const updateSingleUserFromDB = async (userId: number, userData: IUpdateUser) => {
   if (!(await User.isUserExists(userId))) {
     throw new CustomError('User not found', 404, 'User not found');
+  }
+  if (userData.password) {
+    userData.password = await bcrypt.hash(
+      userData.password,
+      Number(config.bcrypt_salt_rounds),
+    );
   }
   const updatedUser = await User.findOneAndUpdate({ userId }, userData, {
     new: true,
