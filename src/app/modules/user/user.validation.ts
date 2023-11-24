@@ -48,7 +48,7 @@ const updateUserZodSchema = z.object({
   }).optional(),
   address: userAddressZodSchema.optional(),
   orders: z.array(orderZodSchema).optional(),
-});
+}).strict();
 
 export const UserZodSchema = {
   createUserSchmea : userZodSchema,
