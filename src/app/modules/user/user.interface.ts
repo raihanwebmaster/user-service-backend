@@ -31,5 +31,5 @@ export type IUser = {
 };
 
 export interface UserModel extends Model<IUser> {
-  isUserExists(userId: number, username: string): Promise<IUser | null>;
+  isUserExists(userId: number, username?: string): Promise<IUser | null>;
 }

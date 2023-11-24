@@ -65,7 +65,26 @@ const getSingleUser = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message:'something went wrong',
+      message: 'something went wrong',
+      error: err,
+    });
+  }
+};
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    await UserServices.deleteUserFromDB(Number(userId));
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: null,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
       error: err,
     });
   }
@@ -74,6 +93,6 @@ const getSingleUser = async (req: Request, res: Response) => {
 export const UserControllers = {
   createUser,
   getAllUsers,
-  getSingleUser
+  getSingleUser,
+  deleteUser,
 };
-

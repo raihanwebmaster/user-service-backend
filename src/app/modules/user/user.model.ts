@@ -46,14 +46,17 @@ const userAddressSchema = new Schema<IUserAddress>({
   },
 });
 
-const orderSchema = new Schema<IOrder>({
-  productName: {
-    type: String,
-    maxlength: [25, 'productName can not be more than 25 characters'],
+const orderSchema = new Schema<IOrder>(
+  {
+    productName: {
+      type: String,
+      maxlength: [25, 'productName can not be more than 25 characters'],
+    },
+    price: Number,
+    quantity: Number,
   },
-  price: Number,
-  quantity: Number,
-},{ _id: false });
+  { _id: false },
+);
 
 const userSchema = new Schema<IUser, UserModel>({
   userId: {
@@ -92,7 +95,7 @@ const userSchema = new Schema<IUser, UserModel>({
   address: {
     type: userAddressSchema,
     required: [true, 'address is required'],
-    _id: false 
+    _id: false,
   },
   orders: {
     type: [orderSchema],
@@ -113,9 +116,10 @@ userSchema.pre('save', async function (next) {
 
 userSchema.statics.isUserExists = async function (
   userId: number,
-  username: string
+  username?: string,
 ) {
-  const existingUser = await User.findOne({ $or: [{ userId }, { username }] });
+  const query = username ? { $or: [{ userId }, { username }] } : { userId };
+  const existingUser = await User.findOne(query);
   return existingUser;
 };
 

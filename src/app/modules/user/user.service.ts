@@ -20,7 +20,7 @@ const getAllUserFromDB = async () => {
     _id: 0,
     isActive: 0,
     hobbies: 0,
-    orders:0
+    orders: 0,
   });
   return result;
 };
@@ -33,8 +33,17 @@ const getSingleUserFromDB = async (userId: number) => {
   return result;
 };
 
+const deleteUserFromDB = async (userId: number) => {
+  if (!(await User.isUserExists(userId))) {
+    throw new Error('User Can not find !');
+  }
+  const result = await User.deleteOne({ userId });
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
+  deleteUserFromDB
 };
