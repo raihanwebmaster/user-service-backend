@@ -2,7 +2,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-// Middleware for handling Zod validation errors
 export const handleZodValidation = (schema: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -10,7 +9,10 @@ export const handleZodValidation = (schema: any) => {
       next();
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const validationErrors = err.errors.map(error => error.message);
+        const validationErrors = err.errors.map(error => ({
+          path: error.path.join('.'),
+          message: error.message,
+        }));
         res.status(400).json({
           success: false,
           message: 'Validation error',

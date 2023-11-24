@@ -7,7 +7,6 @@ import {
   IUserAddress,
   IUserFullName,
   UserModel,
-  //   UserModel,
 } from './user.interface';
 
 const validateHobbiesLength = function (hobbies: string[]) {
