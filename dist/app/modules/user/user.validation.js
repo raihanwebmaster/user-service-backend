@@ -56,7 +56,6 @@ const updateUserZodSchema = zod_1.z
     })
         .optional(),
     address: userAddressZodSchema.optional(),
-    orders: zod_1.z.array(orderZodSchema).optional(),
 })
     .strict();
 exports.UserZodSchema = {
