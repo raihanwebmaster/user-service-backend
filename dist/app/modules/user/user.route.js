@@ -14,4 +14,7 @@ router.get('/', user_controller_1.UserControllers.getAllUsers);
 router.get('/:userId', user_controller_1.UserControllers.getSingleUser);
 router.put('/:userId', (0, user_validationMiddleware_1.handleZodValidation)(user_validation_1.UserZodSchema.updateUserZodSchema), user_controller_1.UserControllers.updateSingleUser);
 router.delete('/:userId', user_controller_1.UserControllers.deleteUser);
+router.put('/:userId/orders', (0, user_validationMiddleware_1.handleZodValidation)(user_validation_1.UserZodSchema.orderZodSchema), user_controller_1.UserControllers.userProductStore);
+router.get('/:userId/orders', user_controller_1.UserControllers.getUserOrdersList);
+router.get('/:userId/orders/total-price', user_controller_1.UserControllers.getUserOrdersTotalPrice);
 exports.UserRoutes = router;

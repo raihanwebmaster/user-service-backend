@@ -149,10 +149,108 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 });
+const userProductStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const productDetails = req.body;
+        yield user_service_1.UserServices.userProductStoreFromDB(Number(userId), productDetails);
+        res.status(200).json({
+            success: true,
+            message: 'Order created successfully!',
+            data: null,
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
+const getUserOrdersList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const orders = yield user_service_1.UserServices.getUserOrdersListFromDB(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: 'Order fetched successfully!',
+            data: {
+                orders,
+            },
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
+const getUserOrdersTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const totalPrice = yield user_service_1.UserServices.getUserOrdersTotalPriceFromDB(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: 'Total price calculated successfully!',
+            data: {
+                totalPrice,
+            },
+        });
+    }
+    catch (err) {
+        if (err.code === 404) {
+            res.status(404).json({
+                success: false,
+                message: err.message || 'User not found',
+                error: {
+                    code: err.code,
+                    description: err.description,
+                },
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: err.message || 'something went wrong',
+                error: err,
+            });
+        }
+    }
+});
 exports.UserControllers = {
     createUser,
     getAllUsers,
     getSingleUser,
     updateSingleUser,
     deleteUser,
+    userProductStore,
+    getUserOrdersList,
+    getUserOrdersTotalPrice
 };

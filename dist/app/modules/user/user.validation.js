@@ -62,4 +62,5 @@ const updateUserZodSchema = zod_1.z
 exports.UserZodSchema = {
     createUserSchmea: userZodSchema,
     updateUserZodSchema,
+    orderZodSchema,
 };

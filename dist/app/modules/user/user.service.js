@@ -79,10 +79,47 @@ const deleteUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function*
     const result = yield user_model_1.User.deleteOne({ userId });
     return result;
 });
+const userProductStoreFromDB = (userId, product) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(yield user_model_1.User.isUserExists(userId))) {
+        throw new CustomError_1.CustomError('User not found!', 404, 'User not found!');
+    }
+    const updatedUser = yield user_model_1.User.findOneAndUpdate({ userId }, { $push: { orders: product } }, { new: true });
+    return updatedUser;
+});
+const getUserOrdersListFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(yield user_model_1.User.isUserExists(userId))) {
+        throw new CustomError_1.CustomError('User not found!', 404, 'User not found!');
+    }
+    const userOrders = yield user_model_1.User.aggregate([
+        { $match: { userId } },
+        { $project: { orders: 1 } },
+    ]);
+    return userOrders[0].orders;
+});
+const getUserOrdersTotalPriceFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(yield user_model_1.User.isUserExists(userId))) {
+        throw new CustomError_1.CustomError('User not found!', 404, 'User not found!');
+    }
+    const userOrders = yield user_model_1.User.aggregate([
+        { $match: { userId } },
+        { $unwind: '$orders' },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: '$orders.price' },
+            },
+        },
+        { $project: { total: 1 } },
+    ]);
+    return userOrders[0].total;
+});
 exports.UserServices = {
     createUserIntoDB,
     getAllUserFromDB,
     getSingleUserFromDB,
     updateSingleUserFromDB,
     deleteUserFromDB,
+    userProductStoreFromDB,
+    getUserOrdersListFromDB,
+    getUserOrdersTotalPriceFromDB,
 };
