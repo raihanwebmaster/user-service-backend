@@ -24,4 +24,6 @@ router.put(
   UserControllers.userProductStore,
 );
 
+router.get("/:userId/orders", UserControllers.getUserOrdersList)
+
 export const UserRoutes = router;

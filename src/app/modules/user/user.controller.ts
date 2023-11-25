@@ -149,15 +149,46 @@ const userProductStore = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const productDetails = req.body;
-    await UserServices.userProductStoreFromDB(
-      Number(userId),
-      productDetails,
-    );
+    await UserServices.userProductStoreFromDB(Number(userId), productDetails);
 
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
       data: null,
+    });
+  } catch (err: any) {
+    if (err.code === 404) {
+      res.status(404).json({
+        success: false,
+        message: err.message || 'User not found',
+        error: {
+          code: err.code,
+          description: err.description,
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: err.message || 'something went wrong',
+        error: err,
+      });
+    }
+  }
+};
+
+const getUserOrdersList = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const orders = await UserServices.getUserOrdersListFromDB(
+      Number(userId),
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: {
+        orders,
+      },
     });
   } catch (err: any) {
     if (err.code === 404) {
@@ -185,5 +216,6 @@ export const UserControllers = {
   getSingleUser,
   updateSingleUser,
   deleteUser,
-  userProductStore
+  userProductStore,
+  getUserOrdersList,
 };
