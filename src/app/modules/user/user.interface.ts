@@ -39,7 +39,6 @@ export type IUpdateUser = {
   isActive?: boolean;
   hobbies?: string[];
   address?: IUserAddress;
-  orders?: IOrder[];
 };
 
 export interface UserModel extends Model<IUser> {
