@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { CustomError } from '../../CustomError';
 import config from '../../config';
-import { IUpdateUser, IUser } from './user.interface';
+import { IOrder, IUpdateUser, IUser } from './user.interface';
 import { User } from './user.model';
 import bcrypt from 'bcrypt';
 
@@ -39,7 +39,10 @@ const getSingleUserFromDB = async (userId: number) => {
   return result;
 };
 
-const updateSingleUserFromDB = async (userId: number, userData: IUpdateUser) => {
+const updateSingleUserFromDB = async (
+  userId: number,
+  userData: IUpdateUser,
+) => {
   if (!(await User.isUserExists(userId))) {
     throw new CustomError('User not found', 404, 'User not found');
   }
@@ -64,10 +67,23 @@ const deleteUserFromDB = async (userId: number) => {
   return result;
 };
 
+const userProductStoreFromDB = async (userId: number, product: IOrder) => {
+  if (!(await User.isUserExists(userId))) {
+    throw new CustomError('User not found!', 404, 'User not found!');
+  }
+  const updatedUser = await User.findOneAndUpdate(
+    { userId },
+    { $push: { orders: product } },
+    { new: true },
+  );
+  return updatedUser;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
   updateSingleUserFromDB,
   deleteUserFromDB,
+  userProductStoreFromDB,
 };

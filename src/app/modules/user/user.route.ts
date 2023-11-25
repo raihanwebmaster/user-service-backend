@@ -18,5 +18,10 @@ router.put(
   UserControllers.updateSingleUser,
 );
 router.delete('/:userId', UserControllers.deleteUser);
+router.put(
+  '/:userId/orders',
+  handleZodValidation(UserZodSchema.orderZodSchema),
+  UserControllers.userProductStore,
+);
 
 export const UserRoutes = router;

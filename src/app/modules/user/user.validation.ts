@@ -79,4 +79,5 @@ const updateUserZodSchema = z
 export const UserZodSchema = {
   createUserSchmea: userZodSchema,
   updateUserZodSchema,
+  orderZodSchema,
 };
